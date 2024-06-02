@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ingredient : {{ ingredient }}{% endblock %}
+
+{% block main %}
+    <h1>Ingredient : {{ ingredient }} </h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for recette in recettes %}
+            <tr>
+                <td>{{ recette.id }}</td>
+                <td>{{ recette.recette.nom }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

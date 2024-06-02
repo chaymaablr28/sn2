@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recette Ingredient index{% endblock %}
+
+{% block main %}
+    <h1>Recette Ingredient</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for recetteIngredient in recetteIngredients %}
+            <tr>
+                <td>{{ recetteIngredient.id }}</td>
+                <td>{{ recetteIngredient.ingredient.nom }}</td>
+                <td>{{ recetteIngredient.quantity }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

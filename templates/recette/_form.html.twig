@@ -1,0 +1,56 @@
+{{ form_start(form) }}
+    {{ form_row(form.nom) }}
+    {{ form_row(form.texte) }}
+    {{ form_row(form.dureeTotal) }}
+    {{ form_row(form.nbrPersonne) }}
+    {{ form_row(form.photoFile) }}
+
+    <div class="recetteIngredients"
+        data-index="{{ form.recetteIngredients|length > 0 ? form.recetteIngredients|last.vars.name + 1 : 0 }}"
+        data-prototype="{{ form_widget(form.recetteIngredients.vars.prototype)|e('html_attr') }}"
+    >
+        {% for recetteIngredient in form.recetteIngredients %}
+            <div class="card">
+                <div class="card-body">
+                    {{ form_row(recetteIngredient.name) }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <button type="button" class="add_item_link btn btn-sm btn-info mt-1" data-collection-holder-class="recetteIngredients">Add a tag</button>
+
+
+    <hr/>
+    <button class="my-3 btn btn-primary">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+
+<script>
+    document
+    .querySelectorAll('.add_item_link')
+    .forEach(btn => {
+        btn.addEventListener("click", addFormToCollection)
+    });
+
+    function addFormToCollection(e) {
+        const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+      
+        const cardItem = document.createElement('div');
+        cardItem.classList.add('card');
+        const bodyItem = document.createElement('div');
+        bodyItem.classList.add('card-body');
+        cardItem.appendChild(bodyItem);
+
+        
+        bodyItem.innerHTML = collectionHolder
+          .dataset
+          .prototype
+          .replace(
+            /__name__/g,
+            collectionHolder.dataset.index
+          );
+      
+        collectionHolder.appendChild(cardItem);
+      
+        collectionHolder.dataset.index++;
+    }
+</script>

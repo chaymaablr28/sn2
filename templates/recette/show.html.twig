@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recette{% endblock %}
+
+{% block main %}
+    <h1>Recette</h1>
+
+    <div class="d-flex justify-content-end">
+        {% if isFavorited %}
+            <a class="btn btn-info mx-2" href="{{ path('app_favoris_remove', {'id': recette.id}) }}">Retrait</a>
+        {% else %}
+            <a class="btn btn-info mx-2" href="{{ path('app_favoris_add', {'id': recette.id}) }}">Ajout Favoriser</a>
+        {% endif %}
+
+        {% if recette.createdBy.id == app.user.id %}
+            <a class="btn btn-info mx-2" href="{{ path('app_recette_edit', {'id': recette.id}) }}">edit</a>
+            {{ include('recette/_delete_form.html.twig') }}
+        {% endif %}
+    </div>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Nom</th>
+                <td>{{ recette.nom }}</td>
+            </tr>
+            <tr>
+                <th>Texte</th>
+                <td>{{ recette.texte }}</td>
+            </tr>
+            <tr>
+                <th>DureeTotal</th>
+                <td>{{ recette.dureeTotal }}</td>
+            </tr>
+            <tr>
+                <th>NbrPersonne</th>
+                <td>{{ recette.nbrPersonne }}</td>
+            </tr>
+            <tr>
+                <th>Favoriser</th>
+                <td>{{ recette.favoris.count }}</td>
+            </tr>
+            <tr>
+                <th>Ingredients</th>
+                <td><a href="{{ path('app_recette_ingredient', {id: recette.id}) }}">Afficher</a></td>
+            </tr>
+            <tr>
+                <th>Photo</th>
+                <td>
+                    <img src="/uploads/recettes/{{ recette.photo }}" class="card-img-top" alt="{{ recette.nom }}">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Comments</h2>
+    <div>
+        {% if app.user %}
+            <form action="{{ path('app_recette_show', {'id': recette.id}) }}" method="POST">
+                {{ form_start(commentForm) }}
+                {{ form_row(commentForm.texte) }}
+                <button type="submit" class="btn btn-sm btn-primary">Add Comment</button>
+                {{ form_end(commentForm) }}
+            </form>
+        {% endif %}
+
+        <hr/>
+        <ul>
+            {% for comment in comments %}
+                <li>{{ comment.texte }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

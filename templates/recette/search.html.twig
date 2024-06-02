@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    <h1>Search Recipes</h1>
+    {{ form_start(form) }}
+        {{ form_row(form.ingredients) }}
+        {{ form_row(form.search) }}
+    {{ form_end(form) }}
+
+    {% if searchResults is not empty %}
+        <h2>Search Results</h2>
+        <div class="row">
+            {% for result in searchResults %}
+                <div class="col-md-4">
+                    <div class="card" style="width: 18rem;">
+                        <img src="/uploads/recettes/{{ result.recette.photo }}" class="card-img-top" alt="{{ result.recette.nom }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ result.recette.nom }}</h5>
+                            <p class="card-text">{{ result.recette.texte }}</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Nombre des personnes : {{ result.recette.nbrPersonne }}</li>
+                                <li class="list-group-item">Durée total : {{ result.recette.dureeTotal }}</li>
+                                <li class="list-group-item">Ingredients :
+                                    <br/>
+                                    {% for recetteIngredient in result.recette.recetteIngredients %}
+                                        <span class="badge badge-sm bg-info m-1">{{ recetteIngredient.ingredient.nom }}</span>
+                                    {% endfor %}
+                                </li>
+                                <li class="list-group-item">Ingredients Available: <span class="badge bg-info">{{ result.percentage }}%</span></li>
+                                <li class="list-group-item">
+                                    {% if result.isFavorised %}
+                                        <span class="badge bg-success" title="Favorited">Favorited</span>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                            <a href="{{ path('app_recette_show', {'id': result.recette.id}) }}" class="btn btn-primary">More details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
